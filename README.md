@@ -21,7 +21,7 @@ Get it now  </a> if it's not already installed on your machine.
 
 Clone this repo into new project folder (e.g., `fta`).
 ```shell
-git clone git@github.com:raghubgowda/fta.git fta
+git clone git@github.com:raghubgowda/fta-frontend.git fta
 cd fta
 ```
 
