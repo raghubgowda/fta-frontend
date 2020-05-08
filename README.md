@@ -9,7 +9,7 @@ Get the backend from the below location and follow the instructions in the readm
 
 `https://github.com/raghubgowda/fta-backend`
 
-The backend service runs on port 8081.
+The backend service runs on port 8080.
 
 ### Node and npm
 Node.js and npm are essential to Angular development. 

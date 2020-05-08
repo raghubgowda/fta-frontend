@@ -4,7 +4,7 @@ import { HttpClient } from '@angular/common/http';
 
 @Injectable({ providedIn: 'root' })
 export class FeatureService {
-    apiUrl: string = 'http://localhost:8081/api/v1/features';
+    apiUrl: string = 'http://localhost:8080/api/v1/features';
     constructor(private http: HttpClient) { }
 
     getAllFeature() {
