@@ -14,7 +14,11 @@ export class AuthenticationService {
     constructor(private http: HttpClient) {
         const stored: User = JSON.parse(localStorage.getItem('currentUser'));
         // drop a stored session whose token has already expired
-        this.currentUserSubject = new BehaviorSubject<User>(stored && !this.isTokenExpired(stored.token) ? stored : null);
+        const expired = !!stored && this.isTokenExpired(stored.token);
+        if (expired) {
+            localStorage.removeItem('currentUser');
+        }
+        this.currentUserSubject = new BehaviorSubject<User>(expired ? null : stored);
         this.currentUser = this.currentUserSubject.asObservable();
     }
 
