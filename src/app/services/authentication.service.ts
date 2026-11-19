@@ -12,12 +12,32 @@ export class AuthenticationService {
     private apiUrl: string = 'http://localhost:8080/token';
 
     constructor(private http: HttpClient) {
-        this.currentUserSubject = new BehaviorSubject<User>(JSON.parse(localStorage.getItem('currentUser')));
+        const stored: User = JSON.parse(localStorage.getItem('currentUser'));
+        // drop a stored session whose token has already expired
+        this.currentUserSubject = new BehaviorSubject<User>(stored && !this.isTokenExpired(stored.token) ? stored : null);
         this.currentUser = this.currentUserSubject.asObservable();
     }
 
     public get currentUserValue(): User {
-        return this.currentUserSubject.value;
+        const user = this.currentUserSubject.value;
+        if (user && this.isTokenExpired(user.token)) {
+            this.logout();
+            return null;
+        }
+        return user;
+    }
+
+    // reads the JWT `exp` claim; tokens that cannot be parsed are left to the server to reject (401)
+    private isTokenExpired(token: string): boolean {
+        if (!token) {
+            return false;
+        }
+        try {
+            const payload = JSON.parse(atob(token.split('.')[1].replace(/-/g, '+').replace(/_/g, '/')));
+            return typeof payload.exp === 'number' && payload.exp * 1000 <= Date.now();
+        } catch {
+            return false;
+        }
     }
 
     login(email:string, password:string) {
