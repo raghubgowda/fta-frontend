@@ -1,5 +1,5 @@
 ﻿import { Injectable } from '@angular/core';
-import { Router, CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
+import { Router, CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree } from '@angular/router';
 import { AuthenticationService } from '../services';
 import { Role } from '../models';
 
@@ -11,17 +11,14 @@ export class RoleGaurd implements CanActivate {
         private authenticationService: AuthenticationService
     ) {}
 
-    canActivate() {
+    canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean | UrlTree {
         const currentUser = this.authenticationService.currentUserValue;
-        if(!currentUser){
-            this.router.navigate(['/login']);
+        if (!currentUser) {
+            return this.router.createUrlTree(['/login'], { queryParams: { returnUrl: state.url } });
         }
-        if(currentUser && currentUser.role === Role.ProductOwner){
-            // not logged in so redirect to login page with the return url
+        if (currentUser.role === Role.ProductOwner) {
             return true;
         }
-        else{
-            this.router.navigate(['']);
-        }
+        return this.router.createUrlTree(['']);
     }
 }

@@ -22,7 +22,7 @@
         <td>{{ feature.technicalName }}</td>
         <td>{{ feature.description }}</td>
         <td>{{ feature.value }}</td>
-        <td>{{ feature.expiresOn | date: "MM-dd-yyyy" }}</td>
+        <td>{{ feature.expiresOn | date: "dd-MM-yyyy" }}</td>
         <td *ngIf="canEdit">
           <button
             class="btn btn-primary"
